@@ -38,7 +38,7 @@ functions:
     handler: src/functions/createTodos.handle
     events:
       - http:
-          path: /createTodos/{id} 
+          path: /todos/{user_id} 
           method: POST
           cors: true
     iamRoleStatements:
@@ -52,7 +52,7 @@ functions:
       handler: src/functions/verifyTodo.handle
       events:
         - http:
-            path: /verifyTodo/{user_id}
+            path: /todos/{user_id}
             method: GET
             cors: true
       iamRoleStatements:

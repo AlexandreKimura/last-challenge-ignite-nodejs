@@ -9,27 +9,27 @@ interface ICreateTodo {
 
 export const handle = async (event) => {
 
-  const { id } = event.pathParameters;
+  const { user_id } = event.pathParameters;
   const { title, deadline } = JSON.parse(event.body) as ICreateTodo;
 
   const response = await document.scan({ 
     TableName: "users_todos",
-    FilterExpression: "title = :title AND user_id = :id",
+    FilterExpression: "title = :title AND user_id = :user_id",
     ExpressionAttributeValues: {
       ":title": title,
-      ":id": id 
+      ":user_id": user_id 
     }
   }).promise();
 
   const todoAlreadyExists = response.Items[0];
   const expires_in = new Date(deadline).toISOString();
-  
+
   if(!todoAlreadyExists) {
     await document.put({
       TableName: "users_todos",
       Item: {
         id: uuidV4(),
-        user_id: id,
+        user_id,
         title,
         done: false,
         deadline: expires_in,
